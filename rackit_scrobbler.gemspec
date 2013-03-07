@@ -24,4 +24,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "lastfm", "~> 1.17.0"
   spec.add_dependency "launchy", "~> 2.2.0"
+  spec.add_dependency 'eventmachine', '~> 1.0.1'
+  spec.add_dependency 'faye-websocket', '~> 0.4.7'
+
 end
