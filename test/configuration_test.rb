@@ -21,9 +21,7 @@ describe RackitScrobbler::Configuration do
   it "can create the last_fm configuration" do
     RackitScrobbler::Configuration.expects(:config_path).returns(FAKE_CONFIG)
     c = RackitScrobbler::Configuration.new
-    assert_equal "rackit user", c.rackit.user
-    assert_equal "rackit pass key", c.rackit.pass_key
-    assert_equal "rackit email", c.rackit.email
+    assert_equal "ws://localhost:13581", c.rackit.rackmate_socket
 
   end
 

@@ -1,9 +1,7 @@
 ---
-:last_fm:
-  :api_key: last fm key
-  :api_secret: last fm secret
-  :session_token: session_token
-:rackit:
-  :user: rackit user
-  :pass_key: rackit pass key
-  :email: rackit email
+last_fm:
+  api_key: last fm key
+  api_secret: last fm secret
+  session_token: session_token
+rackit:
+  rackmate_socket: "ws://localhost:13581"
