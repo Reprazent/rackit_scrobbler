@@ -38,6 +38,7 @@ module RackitScrobbler
 
       def scrobble(track, time)
         with_authentication { lastfm_instance.track.scrobble(artist: track.artist, track: track.title, time: time.to_i) }
+        playing(track)
       end
 
 
