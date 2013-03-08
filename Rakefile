@@ -13,5 +13,5 @@ task :default => :test
 
 desc "Open an pry session with Potemkin loaded"
 task :console do
-  sh "pry -r rackit_scrobbler.rb"
+  sh "pry -I lib -r rackit_scrobbler.rb"
 end
