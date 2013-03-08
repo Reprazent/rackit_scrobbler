@@ -1,6 +1,5 @@
 require 'faye/websocket'
 require 'eventmachine'
-require "em-synchrony"
 require "json"
 
 module RackitScrobbler

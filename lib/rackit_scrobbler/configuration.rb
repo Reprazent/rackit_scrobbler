@@ -1,7 +1,6 @@
 require "ostruct"
 module RackitScrobbler
   class Configuration
-    CONFIG_FILE = "#{Dir.home}/.rackit_scrobbler"
     attr_accessor :last_fm, :rackit, :config_file
     def initialize
       @config_file = YAML::load_file(Configuration.config_path) || {}
@@ -23,7 +22,7 @@ module RackitScrobbler
     end
 
     def self.config_path
-      CONFIG_FILE
+      "#{Dir.home}/.rackit_scrobbler"
     end
 
   end
