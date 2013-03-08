@@ -15,13 +15,14 @@ module RackitScrobbler
       EM.run do
         ws = Faye::WebSocket::Client.new(config.rackmate_socket)
 
+        # TODO: initialize the track on onopen
+
         ws.onmessage = lambda do |event|
           message = JSON.parse(event.data)
           EM.next_tick do
             if message["track"]
               track = RackitScrobbler::Track.new(message["track"])
               player.current_track = track
-              puts "#{track.inspect}"
             end
             case message["event"]
             when "playbackResumed"
