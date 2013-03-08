@@ -8,7 +8,7 @@ module RackitScrobbler
     attr_accessor :player
 
     def initialize(current_player)
-      player = current_player
+      @player = current_player
     end
 
     def start_rackmate
