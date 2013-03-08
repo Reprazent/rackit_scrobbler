@@ -26,5 +26,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "launchy", "~> 2.2.0"
   spec.add_dependency 'eventmachine', '~> 1.0.1'
   spec.add_dependency 'faye-websocket', '~> 0.4.7'
-
+  spec.add_dependency 'active_support', '~> 3.0.0'
 end
