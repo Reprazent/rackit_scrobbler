@@ -1,32 +1,39 @@
 require 'faye/websocket'
 require 'eventmachine'
+require "em-synchrony"
 require "json"
 
 module RackitScrobbler
   class Rackit
+    attr_accessor :player
 
-    def start_paylogger
-      EM.run do
-        ws = Faye::WebSocket::Client.new("ws://playlogger.rackit.co:9996/rackmate")
-        ws.onopen = lambda do |event|
-          ws.send(login_data.to_json)
-        end
-
-        ws.onmessage = lambda do |event|
-          message = JSON.parse(event.data)
-          puts "Message: #{message.inspect}"
-        end
-
-      end
+    def initialize(current_player)
+      player = current_player
     end
 
-    def start_local
+    def start_rackmate
       EM.run do
-        ws = Faye::WebSocket::Client.new("ws://localhost:13581")
+        ws = Faye::WebSocket::Client.new(config.rackmate_socket)
 
         ws.onmessage = lambda do |event|
           message = JSON.parse(event.data)
-          puts "Message: #{message.inspect}"
+          EM.next_tick do
+            if message["track"]
+              track = RackitScrobbler::Track.new(message["track"])
+              player.current_track = track
+              puts "#{track.inspect}"
+            end
+            case message["event"]
+            when "playbackResumed"
+              player.resume
+            when "playbackPaused"
+              player.pause
+            when "trackStarted"
+              player.start
+            when "ping"
+              player.ping(message["fraction"])
+            end
+          end
         end
 
       end
@@ -34,15 +41,8 @@ module RackitScrobbler
     end
 
     def config
-      raise "missing email" unless RackitScrobbler.config.rackit.email
-      raise "missing user id" unless RackitScrobbler.config.rackit.user
-      raise "missing pass_key" unless RackitScrobbler.config.rackit.pass_key
+      raise "set rackmate socket" unless RackitScrobbler.config.rackit.rackmate_socket
       RackitScrobbler.config.rackit
     end
-
-    def login_data
-      {userid: config.user,passkey: config.pass_key}
-    end
-
   end
 end
