@@ -18,6 +18,30 @@ module RackitScrobbler
         lastfm_instance.session = LastFm::Authenticator.new(lastfm_instance).session_key
       end
 
+      def reauthenticate
+        lastfm_instance.session = LastFm::Authenticator.new(lastfm_instance).session_key(true)
+
+      end
+
+      def playing(track)
+        begin
+          lastfm_instance.track.update_now_playing(artist: track.artist, track: track.title)
+        rescue Lastfm::ApiError => e
+          reauthenticate
+          retry
+        end
+      end
+
+      def scrobble(track, time)
+        begin
+          lastfm_instance.track.scrobble(artist: track.artist, track: track.title, time: time.to_i)
+        rescue Lastfm::ApiError => e
+          reauthenticate
+          retry
+        end
+      end
+
+
     end
   end
 end
