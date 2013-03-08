@@ -20,7 +20,6 @@ module RackitScrobbler
 
       def reauthenticate
         lastfm_instance.session = LastFm::Authenticator.new(lastfm_instance).session_key(true)
-
       end
 
       def playing(track)
