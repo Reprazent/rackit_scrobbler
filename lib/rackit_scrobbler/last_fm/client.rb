@@ -22,22 +22,22 @@ module RackitScrobbler
         lastfm_instance.session = LastFm::Authenticator.new(lastfm_instance).session_key(true)
       end
 
-      def playing(track)
+      def with_authentication(&block)
+        authenticate unless authenticated?
         begin
-          lastfm_instance.track.update_now_playing(artist: track.artist, track: track.title)
+          yield
         rescue Lastfm::ApiError => e
           reauthenticate
           retry
         end
       end
 
+      def playing(track)
+          with_authentication { lastfm_instance.track.update_now_playing(artist: track.artist, track: track.title) }
+      end
+
       def scrobble(track, time)
-        begin
-          lastfm_instance.track.scrobble(artist: track.artist, track: track.title, time: time.to_i)
-        rescue Lastfm::ApiError => e
-          reauthenticate
-          retry
-        end
+        with_authentication { lastfm_instance.track.scrobble(artist: track.artist, track: track.title, time: time.to_i) }
       end
 
 
