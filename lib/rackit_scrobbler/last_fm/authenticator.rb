@@ -23,6 +23,7 @@ module RackitScrobbler
         rescue
           Launchy.open("http://www.last.fm/api/auth/?api_key=#{config.api_key}&token=#{token}" )
           puts "Press any key to continue after you've granted access"
+          STDOUT.flush
           response = STDIN.gets.chomp
           retry
         end
