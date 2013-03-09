@@ -25,3 +25,12 @@ task :start do
   listener = RackitScrobbler::Rackit.new(player)
   listener.start_rackmate
 end
+
+desc "creates the config file"
+task :config do
+  require "rackit_scrobbler"
+  RackitScrobbler.config.last_fm.api_key = "57572cbb1e0f50ffe2caffe88c2e9888"
+  RackitScrobbler.config.last_fm.api_secret = "dc0f9f9eeb17d19fea2d1d5d8256bb31"
+  RackitScrobbler.config.rackit.rackmate_socket = "ws://localhost:13581"
+  RackitScrobbler.config.write!
+end
