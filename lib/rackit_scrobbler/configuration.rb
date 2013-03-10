@@ -3,7 +3,11 @@ module RackitScrobbler
   class Configuration
     attr_accessor :last_fm, :rackit, :config_file
     def initialize
-      @config_file = File.exists?(Configuration.config_path) ? YAML::load_file(Configuration.config_path) : {}
+      if File.exists?(Configuration.config_path)
+        @config_file = YAML::load_file(Configuration.config_path)
+      else
+        @config_file = {}
+      end
     end
 
     def last_fm
