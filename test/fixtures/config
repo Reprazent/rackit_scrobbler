@@ -3,5 +3,6 @@ last_fm:
   api_key: last fm key
   api_secret: last fm secret
   session_token: session_token
+  session_key: new_key
 rackit:
-  rackmate_socket: "ws://localhost:13581"
+  rackmate_socket: ws://localhost:13581

@@ -22,12 +22,16 @@ module RackitScrobbler
           key = last_fm.auth.get_session(:token => token)["key"]
         rescue
           Launchy.open("http://www.last.fm/api/auth/?api_key=#{config.api_key}&token=#{token}" )
-          puts "Press any key to continue after you've granted access"
-          STDOUT.flush
-          response = STDIN.gets.chomp
+          wait_for_user
           retry
         end
         key
+      end
+
+      def wait_for_user
+        puts "Press any key to continue after you've granted access"
+        STDOUT.flush
+        response = STDIN.gets.chomp
       end
 
       def config
