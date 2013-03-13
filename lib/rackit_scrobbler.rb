@@ -6,7 +6,8 @@ require "rackit_scrobbler/last_fm/authenticator"
 require "rackit_scrobbler/configuration"
 require "rackit_scrobbler/rackit"
 require "rackit_scrobbler/rackit/rackmate"
-require "rackit_scrobbler/player"
+require "rackit_scrobbler/rackit/playlogger"
+require "rackit_scrobbler/rackit/listener"
 require "rackit_scrobbler/track"
 
 module RackitScrobbler

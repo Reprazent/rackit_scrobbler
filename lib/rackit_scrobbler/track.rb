@@ -1,7 +1,7 @@
 require "active_support/all"
 module RackitScrobbler
   class Track
-    attr_accessor :artist, :title, :album, :route, :partner_id, :duration, :scrobbled, :genres
+    attr_accessor :artist, :title, :album, :route, :partner_id, :duration, :scrobbled, :genres, :user_id, :user, :play_date
     def initialize(params = {})
       params.keys.each do |k|
         send("#{k.underscore}=", params[k])
@@ -12,5 +12,8 @@ module RackitScrobbler
       "#{artist}: #{album} - #{title}"
     end
 
+    def self.try_parse(params)
+      self.new(params) rescue nil
+    end
   end
 end

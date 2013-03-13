@@ -20,7 +20,7 @@ desc "start"
 task :start do
   require "rackit_scrobbler"
   last_fm_client = RackitScrobbler::LastFm::Client.new(RackitScrobbler.config.last_fm.session_key)
-  player = RackitScrobbler::Player.new(last_fm_client)
+  player = RackitScrobbler::Rackit::Listener.new(last_fm_client)
   listener = RackitScrobbler::Rackit::Rackmate.new(player)
   listener.start_rackmate
 end
