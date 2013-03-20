@@ -9,7 +9,7 @@ module RackitScrobbler
     end
 
     def to_s
-      "#{artist}: #{album} - #{title}"
+      "(#{user_id}) #{artist}: #{album} - #{title}"
     end
 
     def self.try_parse(params)
