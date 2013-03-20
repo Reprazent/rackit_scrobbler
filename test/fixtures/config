@@ -6,3 +6,4 @@ last_fm:
   session_key: new_key
 rackit:
   rackmate_socket: ws://localhost:13581
+  playlogger_socket: ws://playlogger.rackit.co:9996/events
