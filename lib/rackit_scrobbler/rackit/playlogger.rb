@@ -51,8 +51,10 @@ module RackitScrobbler
         end
       end
 
-      def add_user(username)
-        usernames << username
+      def add_users(new_names)
+        new_names = new_names.is_a?(String) ? [new_names] : new_names
+        usernames += new_names
+        usernames.uniq!
         subscribe_users
       end
 
