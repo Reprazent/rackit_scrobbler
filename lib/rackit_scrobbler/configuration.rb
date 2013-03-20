@@ -15,7 +15,8 @@ module RackitScrobbler
     end
 
     def rackit
-      @rackit ||= OpenStruct.new(config_file["rackit"])
+      @rackit ||= OpenStruct.new(rackmate_socket: "ws://localhost:13581",
+                                 playlogger_socket: "ws://playlogger.rackit.co:9996/events")
     end
 
     def write!
