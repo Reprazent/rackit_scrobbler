@@ -5,33 +5,38 @@ require "json"
 module RackitScrobbler
   module Rackit
     class PlayLogger
-      attr_accessor :usernames, :websocket, :listener
+      attr_accessor :subscribed_users, :websocket, :listener
 
       def initialize(listener: nil, usernames: [])
         @listener = listener
-        @usernames = usernames
+        @subscribed_users = usernames
       end
 
       def start_playlogger
         EM.run do
-          @websocket = Faye::WebSocket::Client.new(config.playlogger_socket)
+          listen_to_socket
+          check_for_users
+        end
+      end
 
-          @websocket.onopen = lambda do |event|
-            subscribe_users
-          end
+      def listen_to_socket
+        @websocket = Faye::WebSocket::Client.new(config.playlogger_socket)
 
-          @websocket.onmessage = lambda do |event|
-            data = JSON.parse(event.data)
-            played_track = RackitScrobbler::Track.try_parse(data)
-            return unless played_track
-            handle_track(played_track)
-          end
+        @websocket.onopen = lambda do |event|
+          subscribe_users
+          puts "Started listening"
         end
 
+        @websocket.onmessage = lambda do |event|
+          data = JSON.parse(event.data)
+          played_track = RackitScrobbler::Track.try_parse(data)
+          return unless played_track
+          handle_track(played_track)
+        end
       end
 
       def handle_track(played_track)
-        puts "playing #{played_track}"
+        puts "played #{played_track}"
         EM.next_tick do
           if played_track && listener && listener.respond_to?(:playing)
             listener.playing(played_track)
@@ -39,23 +44,23 @@ module RackitScrobbler
         end
       end
 
-      def subscribe_users
+      def check_for_users
+        EM.add_periodic_timer(10) do
+          add_users(listener.listening_users) if listener.respond_to?(:listening_users)
+        end
+      end
+
+      def add_users(users)
         EM.next_tick do
-          usernames.each { |name| websocket.send(subscribe_data(name)) }
+          new_users = users - @subscribed_users
+          new_users.each {|name| @websocket.send(subscribe_data(name)) }
+          @subscribed_users += new_users
+          puts "subscribed #{new_users}" if new_users.any?
         end
       end
 
-      def unsubscribe_users
-        usernames.each do |name|
-          websocket.send(unsubscribe_data(name))
-        end
-      end
-
-      def add_users(new_names)
-        new_names = new_names.is_a?(String) ? [new_names] : new_names
-        usernames += new_names
-        usernames.uniq!
-        subscribe_users
+      def subscribe_users
+        subscribed_users.each {|name| @websocket.send(subscribe_data(name)) }
       end
 
       def subscribe_data(username)
