@@ -21,8 +21,7 @@ module RackitScrobbler
 
     def write!
       File.open(self.class.config_path, "w+") do |f|
-        YAML.dump({ "last_fm" =>  last_fm.to_h.stringify_keys,
-                    "rackit" => rackit.to_h.stringify_keys}, f)
+        YAML.dump({ "last_fm" =>  last_fm.to_h.stringify_keys}, f)
       end
     end
 
