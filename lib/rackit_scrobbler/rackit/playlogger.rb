@@ -33,6 +33,10 @@ module RackitScrobbler
           return unless played_track
           handle_track(played_track)
         end
+
+        @websocket.onclose = lambda do |event|
+          EM.stop
+        end
       end
 
       def handle_track(played_track)
