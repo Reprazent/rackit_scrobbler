@@ -29,9 +29,12 @@ module RackitScrobbler
 
         @websocket.onmessage = lambda do |event|
           data = JSON.parse(event.data)
-          played_track = RackitScrobbler::Track.try_parse(data)
-          return unless played_track
-          handle_track(played_track)
+          puts data.inspect
+          if played_track = RackitScrobbler::Track.try_parse(data)
+            handle_track(played_track)
+          else
+            puts data.inspect
+          end
         end
 
         @websocket.onclose = lambda do |event|
