@@ -65,7 +65,9 @@ module RackitScrobbler
       end
 
       def subscribe_users
-        subscribed_users.each {|name| @websocket.send(subscribe_data(name)) }
+        EM.next_tick do
+          subscribed_users.each {|name| @websocket.send(subscribe_data(name)) }
+        end
       end
 
       def subscribe_data(username)
