@@ -49,7 +49,6 @@ module RackitScrobbler
       end
 
       def check_for_users
-        subscribe_users
         EM.add_periodic_timer(10) do
           add_users(listener.listening_users) if listener.respond_to?(:listening_users)
         end
@@ -67,6 +66,7 @@ module RackitScrobbler
       def subscribe_users
         EM.next_tick do
           subscribed_users.each {|name| @websocket.send(subscribe_data(name)) }
+          puts "subscribed #{subscribed_users} at startup"
         end
       end
 
