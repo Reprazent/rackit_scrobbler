@@ -14,8 +14,8 @@ module RackitScrobbler
 
       def start_playlogger
         EM.run do
-          listen_to_socket
           check_for_users
+          listen_to_socket
         end
       end
 
